@@ -1,0 +1,10 @@
+Changes
+Graph.pm
+Graph/DataSet.pm
+Makefile.PL
+MANIFEST
+t/00Graph_config.t
+t/01Graph_Bar.t
+t/Graph.t
+t/Graph.t
+t/Graph-DataSet.t
