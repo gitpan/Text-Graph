@@ -12,13 +12,12 @@ require Exporter;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 
 sub new
  {
-  my $self = shift;
-  my $class = ref $self || $self;
+  my $class = shift;
   my $obj = {
               values => [],
 	      labels => undef,
@@ -39,8 +38,9 @@ sub new
     $obj->{labels} = shift if 'ARRAY' eq ref $_[0];
    }
 
-  if(@_ and 0 == (@_ % 2))
+  if(@_)
    {
+    die "Odd number of parameters to new.\n" unless 0 == (@_ % 2);
     $obj = { %$obj, @_ };
    }
 
@@ -80,19 +80,18 @@ sub _initialize ($)
        {
         $self->{labels} = [ $self->{sort}->( keys %{$self->{hash}} ) ];
        }
+      else
+       {
+        $self->{labels} = [ keys %{$self->{hash}} ];
+       }
      }
      
     $self->{values} = [ @{$self->{hash}}{@{$self->{labels}}} ];
    }
-  elsif(defined $self->{values})
+  elsif(!defined $self->{labels})
    {
-    unless(defined $self->{labels})
-     {
-      $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
-     }
+    $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
    }
-
-  $self->{labels} ||= [];
 
   if(scalar @{$self->{values}} > scalar @{$self->{labels}})
    {

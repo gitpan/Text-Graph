@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 12;
+use Test::More tests => 23;
 use Data::Dumper;
 
 use Text::Graph;
@@ -167,6 +167,23 @@ $out = $graph->to_string( $dset );
 
 is( $out, $expected, "showing values" );
 
+# test maxval
+$expected = <<'EOF';
+Monday    :
+Tuesday   :*
+Wednesday :**
+Thursday  :***
+Friday    :*********
+Saturday  :*******************
+Sunday    :****
+EOF
+
+$graph = Text::Graph->new( 'Bar', maxval => 20 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "maxval only" );
+
 # test log chart
 $expected = <<'EOF';
 Monday    :*****
@@ -205,4 +222,163 @@ $graph = Text::Graph->new( 'Bar', log => 1, showval => 1 );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, showing values" );
+
+# test log chart with 0 minval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 0 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, 0 minval" );
+
+# test log chart with 1 minval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 1 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, 1 minval" );
+
+# Raw numbers, not a dataset
+$graph = Text::Graph->new( 'Bar' );
+my @unlabelledExpected = (
+             ' :',
+             ' :*',
+             ' :**',
+             ' :***',
+             ' :*********',
+             ' :*******************',
+             ' :****',
+            );
+
+$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
+
+is_deeply( $out, \@unlabelledExpected, "Not a dataset" );
+
+$expected = join( "\n", @unlabelledExpected, '' );
+
+$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
+
+is( $out, $expected, "Not a dataset" );
+
+# No fill
+$graph = Text::Graph->new( 'Bar', fill => '' );
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+@expected = (
+             'Monday    :',
+             'Tuesday   :*',
+             'Wednesday :**',
+             'Thursday  :***',
+             'Friday    :*********',
+             'Saturday  :*******************',
+             'Sunday    :****',
+            );
+
+$out = $graph->make_labelled_lines( $dset );
+
+is_deeply( $out, \@expected, "No fill" );
+
+$expected = join( "\n", @expected, '' );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "No Fill" );
+
+# No fill, no marker
+$graph = Text::Graph->new( 'Bar', fill => '', marker => '' );
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+@expected = (
+             'Monday    :',
+             'Tuesday   :',
+             'Wednesday :',
+             'Thursday  :',
+             'Friday    :',
+             'Saturday  :',
+             'Sunday    :',
+            );
+
+$out = $graph->make_labelled_lines( $dset );
+
+is_deeply( $out, \@expected, "No fill or marker" );
+
+$expected = join( "\n", @expected, '' );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "No Fill or marker" );
+
+
+# test log chart with 1 minval and 1000 maxval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 1, maxval => 1000 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, minval and maxval" );
+
+# test clip both ends of range
+$expected = <<'EOF';
+Monday    :
+Tuesday   :
+Wednesday :*
+Thursday  :**
+Friday    :********
+Saturday  :**********
+Sunday    :***
+EOF
+
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', minval => 2, maxval => 12 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "clip both ends" );
 

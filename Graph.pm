@@ -12,13 +12,12 @@ require Exporter;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 
 sub new
  {
-  my $self = shift;
-  my $class = ref $self || $self;
+  my $class = shift;
   my $style = shift || 'Bar';
 
   my $obj = { _initialize($style),
@@ -41,12 +40,14 @@ sub new
 
 sub _initialize ($)
  {
-  my $style = lc shift;
-  if('bar' eq $style)
+  my $style = shift;
+  my $lstyle = lc $style;
+
+  if('bar' eq $lstyle)
    {
     ( style => 'Bar', marker => '*', line => ' ' );
    }
-  elsif('line' eq $style)
+  elsif('line' eq $lstyle)
    {
     ( style => 'Line', marker => '*', fill => ' ', line => '.' );
    }
@@ -160,9 +161,6 @@ sub  _histogram
   my @values;
 
   $parms->{fill} ||= $parms->{marker};
-
-  die "Data set must be a Text::Graph::DataSet object.\n"
-      unless 'Text::Graph::DataSet' eq ref $dset;
 
   my @orig = $dset->get_values;
   if($parms->{log})
