@@ -1,10 +1,19 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Text-Graph
-version:      0.23
-version_from: Graph.pm
-installdirs:  site
-requires:
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+---
+abstract: 'Perl module for generating simple text-based graphs.'
+author:
+  - 'G. Wade Johnson <gwadej@cpan.org>'
+build_requires: {}
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.133380'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Text-Graph
+no_index:
+  directory:
+    - t
+    - inc
+resources:
+  repository: https://github.com/gwadej/Text-Graph.git
+version: 0.50

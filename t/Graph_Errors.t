@@ -1,16 +1,12 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # Test building graphs with an invalid style.
 
 use strict;
+use warnings;
 use Test::More tests => 1;
-use Data::Dumper;
 
 use Text::Graph;
-use Text::Graph::DataSet;
 
-eval {
-my $graph = Text::Graph->new( 'Fred' );
-};
-
+eval { Text::Graph->new( 'Fred' ); };
 is( $@, "Unknown style 'Fred'.\n", "A bad style should fail." );
 
