@@ -32,6 +32,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Moo" : "0",
             "Test::More" : "0",
             "perl" : "5.006",
             "version" : "0"
@@ -46,5 +47,5 @@
          "web" : "https://github.com/gwadej/Text-Graph"
       }
    },
-   "version" : "0.80"
+   "version" : "0.81"
 }
