@@ -26,6 +26,6 @@ foreach my $MODULE ( @MODULES ) {
 	}
 }
 
-all_pod_coverage_ok();
+all_pod_coverage_ok( { also_private => [qr/\ABUILDARGS\z/] } );
 
 1;

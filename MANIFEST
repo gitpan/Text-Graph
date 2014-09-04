@@ -14,6 +14,7 @@ t/Graph.t
 t/Graph_arrayref.t
 xt/critic.t
 xt/hasversion.t
+xt/minimumversion.t
 xt/pod.t
 xt/podcoverage.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
