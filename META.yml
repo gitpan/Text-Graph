@@ -20,8 +20,9 @@ no_index:
 requires:
   Moo: 0
   Test::More: 0
+  namespace::clean: 0
   perl: 5.006
   version: 0
 resources:
   repository: https://github.com/gwadej/Text-Graph.git
-version: 0.81
+version: 0.82
